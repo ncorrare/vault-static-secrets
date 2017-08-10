@@ -6,8 +6,8 @@ The goal of this guide is to demonstrate creating, reading, updating and deletin
 
 ## Prerequisites
 
-- [Vault Cluster Guide](https://www.vaultproject.io/guides/vault-cluster.html)
-- [Vault Initialization Guide](https://www.vaultproject.io/guides/vault-init.html)
+- [Vault Cluster Guide](https://github.com/hashicorp-guides/vault-cluster)
+- [Vault Initialization Guide](https://github.com/hashicorp-guides/vault-operations)
 
 ## Challenge
 Organizations generally have static secrets which creation cannot be managed by one of Vault's Dynamic Secret Backends. These may include:
