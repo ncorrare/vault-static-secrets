@@ -144,7 +144,7 @@ From Vault’s Web UI:
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 - Click Edit Secret
-![Edit Secret](/img/edit-secret.png “Edit Secret”)
+![Edit Secret](/img/edit-secret.png "Edit Secret")
 
 ### Deleting a secret
 From Vault’s CLI:
@@ -161,11 +161,11 @@ From Vault’s Web UI:
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 - Click Edit Secret
-![Edit Secret](/img/edit-secret.png “Edit Secret”)
+![Edit Secret](/img/edit-secret.png "Edit Secret")
 - Click Delete Secret
-![Delete Secret](/img/delete-secret.png “Delete Secret”)
+![Delete Secret](/img/delete-secret.png "Delete Secret")
 - Confirm Deletion
-![Confirm Delete Secret](/img/confirm-delete.png “Confirm Delete Secret”)
+![Confirm Delete Secret](/img/confirm-delete.png "Confirm Delete Secret")
 
 From the API
 - HTTP DELETE the path to the secret
