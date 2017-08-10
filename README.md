@@ -19,7 +19,7 @@ Organizations generally have static secrets which creation cannot be managed by 
 These generally need to be stored centrally (to simplify rotation), and distributed securely to clients subject to policy and audit. Vault's static secret backends allow the secure store of generic secrets in a central repository.
 Vault includes by default a generic secret mount in the _/secret_ path.
 
-## Solution
+## Steps
 
 Ensure that a VAULT_TOKEN environment variable is set:
 
@@ -37,17 +37,23 @@ http://localhost:8200
 $
 ```
 
-### Creating a secret
-Using the Vault's CLI:
+### Step 1: Creating a secret
+#### CLI
+##### Request
 
 - Write a secret called _bar_, with a content called _baz_ to the _secret/foo_ path in Vault.
 ```bash
 $ vault write secret/foo bar=baz
+```
+##### Response
+- The expected response for a valid command is
+```bash
 Success! Data written to: secret/foo
 $
 ```
 
-Using Vault's Web UI:
+#### UI
+##### Request
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on _Create Secret_
@@ -55,12 +61,21 @@ Using Vault's Web UI:
 - Fill in the form as below, and click on _Create Secret_
 ![Form Create Secret](/img/create-secret-2.png "Fill in the form")
 
-Using the API:
+
+##### Response
+- Values should show as the response
+![bar baz](/img/bar-baz.png "View bar = baz")
+
+#### API
+##### Request
 - POST a JSON encoded key value pair with the secret to the path
 ```bash
 $ curl -vv \
   "${VAULT_ADDR}/v1/secret/foo" -H 'Content-Type: application/json' \
   -H "X-Vault-Token: ${VAULT_TOKEN}" --data-binary '{"bar":"baz"}'
+````
+##### Response
+```
 *   Trying ::1...
 * TCP_NODELAY set
 * Connection failed
@@ -83,14 +98,33 @@ $ curl -vv \
 < Date: Thu, 10 Aug 2017 21:56:43 GMT
 <
 * Connection #0 to host localhost left intact
-$
+
 ```
 The 204 HTTP Response code indicates that the value was added correctly.
 
-### Reading a secret
-From Vault’s CLI:
+#### Validation
+##### Request
+- From the guide directory, run _rake step1_
+```bash
+$ rake step1
+```
+##### Response
+```bash
+/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby -I/Library/Ruby/Gems/2.0.0/gems/rspec-support-3.6.0/lib:/Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/lib /Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/exe/rspec spec/step-1_spec.rb
+.
+
+Finished in 0.07541 seconds (files took 1.15 seconds to load)
+1 example, 0 failures
+```
+
+### Step 2: Reading a secret
+#### CLI
+##### Request
 ```bash
 $ vault read secret/foo
+```
+##### Response
+```bash
 Key               Value
 ---               -----
 refresh_interval  768h0m0s
@@ -98,24 +132,36 @@ bar               baz
 
 $
 ```
-From Vault’s Web UI:
+
+#### UI
+##### Request
+
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on the _foo_ secret
 ![foo secret](/img/select-foo.png "Click on the foo secret")
+##### Response
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 
-Using the API:
+#### API:
+##### Request
 - HTTP GET to the secret path
 ```bash
 $ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}"
+```
+##### Response
+```
 {"request_id":"cc0d13ff-8345-f04b-232b-cf9b3ec3a584","lease_id":"","renewable":false,"lease_duration":2764800,"data":{"bar":"baz"},"wrap_info":null,"warnings":null,"auth":null}
 $
 ```
 Optionally you can use a tool to format the output:
+##### Request
 ```bash
 $ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}" | python -mjson.tool
+```
+##### Response
+```
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   177  100   177    0     0  30000      0 --:--:-- --:--:-- --:--:-- 35400
@@ -132,11 +178,27 @@ $ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}" | python
     "wrap_info": null
 }
 ```
+#### Validation
+##### Request
+- From the guide directory, run _rake step2_
+```bash
+$ rake step2
+```
+##### Response
+```bash
+/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby -I/Library/Ruby/Gems/2.0.0/gems/rspec-support-3.6.0/lib:/Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/lib /Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/exe/rspec spec/step-2_spec.rb
+.
 
-### Updating a secret
+Finished in 0.07541 seconds (files took 1.15 seconds to load)
+1 example, 0 failures
+```
+
+
+### Step 3: Updating a secret
 The secret update operation on the CLI and the API is exactly the same as the write operation. Following the steps described above Vault will overwrite the secret with the new value.
 
-From Vault’s Web UI:
+#### UI
+##### Request
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on the _foo_ secret
@@ -144,16 +206,39 @@ From Vault’s Web UI:
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 - Click Edit Secret
-![Edit Secret](/img/edit-secret.png "Edit Secret")
+![Edit Secret](img/edit-secret.png "Edit Secret")
+##### Response
+- Values should show as the response
+![bar baz](/img/bar-baz.png "View bar = baz")
 
-### Deleting a secret
-From Vault’s CLI:
+#### Validation
+##### Request
+- From the guide directory, run _rake step3_
+```bash
+$ rake step3
+```
+##### Response
+```bash
+/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby -I/Library/Ruby/Gems/2.0.0/gems/rspec-support-3.6.0/lib:/Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/lib /Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/exe/rspec spec/step-3_spec.rb
+.
+
+Finished in 0.07541 seconds (files took 1.15 seconds to load)
+1 example, 0 failures
+```
+
+### Step 4: Deleting a secret
+#### CLI
+##### Request
 ```bash
 $ vault delete secret/foo
+```
+##### Response
+```
 Success! Deleted 'secret/foo' if it existed.
 ```
 
-From Vault’s Web UI:
+#### UI:
+##### Request
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on the _foo_ secret
@@ -161,16 +246,23 @@ From Vault’s Web UI:
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 - Click Edit Secret
-![Edit Secret](/img/edit-secret.png "Edit Secret")
+![Edit Secret](img/edit-secret.png "Edit Secret")
 - Click Delete Secret
-![Delete Secret](/img/delete-secret.png "Delete Secret")
+![Delete Secret](img/delete-secret.png "Delete Secret")
 - Confirm Deletion
-![Confirm Delete Secret](/img/confirm-delete.png "Confirm Delete Secret")
+![Confirm Delete Secret](img/confirm-delete.png "Confirm Delete Secret")
+##### Response
+- The path _foo_ shouldn’t be present in the _secret_ mount
+![Create Secret](/img/create-secret-1.png "Create Secret")
 
-From the API
+#### API
+##### Request
 - HTTP DELETE the path to the secret
 ```bash
 curl -vv -X DELETE "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}"
+```
+##### Response
+```
 *   Trying ::1...
 * TCP_NODELAY set
 * Connection failed
@@ -191,4 +283,19 @@ curl -vv -X DELETE "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKE
 <
 * Connection #0 to host localhost left intact
 ```
+#### Validation
+##### Request
+- From the guide directory, run _rake step4_
+```bash
+$ rake step4
+```
+##### Response
+```bash
+/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby -I/Library/Ruby/Gems/2.0.0/gems/rspec-support-3.6.0/lib:/Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/lib /Library/Ruby/Gems/2.0.0/gems/rspec-core-3.6.0/exe/rspec spec/step-3_spec.rb
+.
+
+Finished in 0.07541 seconds (files took 1.15 seconds to load)
+1 example, 0 failures
+```
+
 
