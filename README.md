@@ -24,8 +24,8 @@ Vault includes by default a generic secret mount in the _/secret_ path.
 Ensure that a VAULT_TOKEN environment variable is set:
 
 
-{% highlight bash %}
+```bash
 $ echo $VAULT_TOKEN
 31e4bd7d-3172-9933-e11c-57bf95ce9f02
 $
-{% endhighlight %}
+```
