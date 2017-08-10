@@ -38,7 +38,7 @@ $
 ```
 
 ### Creating a secret
-Using the Vault's CLI:
+####Using the Vault's CLI:
 
 - Write a secret called _bar_, with a content called _baz_ to the _secret/foo_ path in Vault.
 ```bash
@@ -47,7 +47,7 @@ Success! Data written to: secret/foo
 $
 ```
 
-Using Vault's Web UI:
+####Using Vault's Web UI:
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on _Create Secret_
@@ -55,7 +55,7 @@ Using Vault's Web UI:
 - Fill in the form as below, and click on _Create Secret_
 ![Form Create Secret](/img/create-secret-2.png "Fill in the form")
 
-Using the API:
+####Using the API:
 - POST a JSON encoded key value pair with the secret to the path
 ```bash
 $ curl -vv \
@@ -86,4 +86,50 @@ $ curl -vv \
 $
 ```
 The 204 HTTP Response code indicates that the value was added correctly.
+
+### Reading a secret
+####From Vault’s CLI:
+```bash
+$ vault read secret/foo
+Key               Value
+---               -----
+refresh_interval  768h0m0s
+bar               baz
+
+$
+```
+####From Vault’s Web UI:
+- Navigate to the _secret_ path
+![secret path](/img/select-mount.png "Navigate to the secret path")
+- Click on the _foo_ secret
+![foo secret](/img/select-foo.png "Click on the foo secret")
+- Verify the bar = baz key/value pair
+![bar baz](/img/bar-baz.png "View bar = baz")
+
+####Using the API:
+- HTTP GET to the secret path
+```bash
+$ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}"
+{"request_id":"cc0d13ff-8345-f04b-232b-cf9b3ec3a584","lease_id":"","renewable":false,"lease_duration":2764800,"data":{"bar":"baz"},"wrap_info":null,"warnings":null,"auth":null}
+$
+```
+Optionally you can use a tool to format the output:
+```bash
+$ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}" | python -mjson.tool
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   177  100   177    0     0  30000      0 --:--:-- --:--:-- --:--:-- 35400
+{
+    "auth": null,
+    "data": {
+        "bar": "baz"
+    },
+    "lease_duration": 2764800,
+    "lease_id": "",
+    "renewable": false,
+    "request_id": "d7438a64-0162-61c9-cda1-2d503c1379b6",
+    "warnings": null,
+    "wrap_info": null
+}
+```
 
