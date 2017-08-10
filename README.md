@@ -38,7 +38,7 @@ $
 ```
 
 ### Creating a secret
-####Using the Vault's CLI:
+Using the Vault's CLI:
 
 - Write a secret called _bar_, with a content called _baz_ to the _secret/foo_ path in Vault.
 ```bash
@@ -47,7 +47,7 @@ Success! Data written to: secret/foo
 $
 ```
 
-####Using Vault's Web UI:
+Using Vault's Web UI:
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on _Create Secret_
@@ -55,7 +55,7 @@ $
 - Fill in the form as below, and click on _Create Secret_
 ![Form Create Secret](/img/create-secret-2.png "Fill in the form")
 
-####Using the API:
+Using the API:
 - POST a JSON encoded key value pair with the secret to the path
 ```bash
 $ curl -vv \
@@ -88,7 +88,7 @@ $
 The 204 HTTP Response code indicates that the value was added correctly.
 
 ### Reading a secret
-####From Vault’s CLI:
+From Vault’s CLI:
 ```bash
 $ vault read secret/foo
 Key               Value
@@ -98,7 +98,7 @@ bar               baz
 
 $
 ```
-####From Vault’s Web UI:
+From Vault’s Web UI:
 - Navigate to the _secret_ path
 ![secret path](/img/select-mount.png "Navigate to the secret path")
 - Click on the _foo_ secret
@@ -106,7 +106,7 @@ $
 - Verify the bar = baz key/value pair
 ![bar baz](/img/bar-baz.png "View bar = baz")
 
-####Using the API:
+Using the API:
 - HTTP GET to the secret path
 ```bash
 $ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}"
@@ -131,5 +131,64 @@ $ curl "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}" | python
     "warnings": null,
     "wrap_info": null
 }
+```
+
+### Updating a secret
+The secret update operation on the CLI and the API is exactly the same as the write operation. Following the steps described above Vault will overwrite the secret with the new value.
+
+From Vault’s Web UI:
+- Navigate to the _secret_ path
+![secret path](/img/select-mount.png "Navigate to the secret path")
+- Click on the _foo_ secret
+![foo secret](/img/select-foo.png "Click on the foo secret")
+- Verify the bar = baz key/value pair
+![bar baz](/img/bar-baz.png "View bar = baz")
+- Click Edit Secret
+![Edit Secret](img/edit-secret.png “Edit Secret”)
+
+### Deleting a secret
+From Vault’s CLI:
+```bash
+$ vault delete secret/foo
+Success! Deleted 'secret/foo' if it existed.
+```
+
+From Vault’s Web UI:
+- Navigate to the _secret_ path
+![secret path](/img/select-mount.png "Navigate to the secret path")
+- Click on the _foo_ secret
+![foo secret](/img/select-foo.png "Click on the foo secret")
+- Verify the bar = baz key/value pair
+![bar baz](/img/bar-baz.png "View bar = baz")
+- Click Edit Secret
+![Edit Secret](img/edit-secret.png “Edit Secret”)
+- Click Delete Secret
+![Delete Secret](img/delete-secret.png “Delete Secret”)
+- Confirm Deletion
+![Confirm Delete Secret](img/confirm-delete.png “Confirm Delete Secret”)
+
+From the API
+- HTTP DELETE the path to the secret
+```bash
+curl -vv -X DELETE "${VAULT_ADDR}/v1/secret/foo" -H "X-Vault-Token: ${VAULT_TOKEN}"
+*   Trying ::1...
+* TCP_NODELAY set
+* Connection failed
+* connect to ::1 port 8200 failed: Connection refused
+*   Trying 127.0.0.1...
+* TCP_NODELAY set
+* Connected to localhost (127.0.0.1) port 8200 (#0)
+> DELETE /v1/secret/foo HTTP/1.1
+> Host: localhost:8200
+> User-Agent: curl/7.54.0
+> Accept: */*
+> X-Vault-Token: 2a76f2b1-0e8c-8c0c-39aa-9f027e41bc6d
+>
+< HTTP/1.1 204 No Content
+< Cache-Control: no-store
+< Content-Type: application/json
+< Date: Thu, 10 Aug 2017 22:28:08 GMT
+<
+* Connection #0 to host localhost left intact
 ```
 
